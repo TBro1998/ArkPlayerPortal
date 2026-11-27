@@ -1,0 +1,53 @@
+{
+  "updated_at": "2026-11-27T12:00:00Z",
+  "commands": {"buy": "/buy", "kit": "/kit", "buy_kit": "/buykit", "points": "/points", "shop": "/shop", "sell": "/sell"},
+  "items": [
+    {
+      "id": "ingots100", "type": "item", "description": "金属锭 ×100", "price": 15,
+      "min_level": 0, "max_level": 0, "permissions": [],
+      "items": [{"blueprint": "Blueprint'/Game/PrimalEarth/CoreBlueprints/Resources/PrimalItemResource_MetalIngot.PrimalItemResource_MetalIngot'", "amount": 100, "quality": 0, "blueprint_only": false}]
+    },
+    {
+      "id": "tools", "type": "item", "description": "金属工具（斧、镐）", "price": 5,
+      "min_level": 0, "max_level": 0, "permissions": [],
+      "items": [
+        {"blueprint": "Blueprint'/Game/PrimalEarth/CoreBlueprints/Weapons/PrimalItem_WeaponMetalHatchet.PrimalItem_WeaponMetalHatchet'", "amount": 1, "quality": 0, "blueprint_only": false},
+        {"blueprint": "Blueprint'/Game/PrimalEarth/CoreBlueprints/Weapons/PrimalItem_WeaponMetalPick.PrimalItem_WeaponMetalPick'", "amount": 1, "quality": 0, "blueprint_only": false}
+      ]
+    },
+    {
+      "id": "carno", "type": "dino", "description": "公牛龙（带鞍）", "price": 50,
+      "min_level": 10, "max_level": 0, "permissions": [],
+      "dinos": [{"blueprint": "Blueprint'/Game/PrimalEarth/Dinos/Carno/Carno_Character_BP.Carno_Character_BP'", "level": 15, "neutered": true, "gender": "male", "saddle_blueprint": "Blueprint'/Game/PrimalEarth/CoreBlueprints/Items/Armor/Saddles/PrimalItemArmor_CarnoSaddle.PrimalItemArmor_CarnoSaddle'"}]
+    },
+    {
+      "id": "para", "type": "dino", "description": "副栉龙", "price": 20,
+      "min_level": 10, "max_level": 15, "permissions": [],
+      "dinos": [{"blueprint": "Blueprint'/Game/PrimalEarth/Dinos/Para/Para_Character_BP.Para_Character_BP'", "level": 10, "neutered": false, "gender": "", "saddle_blueprint": ""}]
+    },
+    {"id": "crate25", "type": "beacon", "description": "25 级补给箱", "price": 100, "min_level": 0, "max_level": 0, "permissions": [], "beacon": "SupplyCrate_Level25_Double_C"},
+    {"id": "exp1000", "type": "experience", "description": "1000 经验", "price": 55, "min_level": 0, "max_level": 0, "permissions": [], "experience": {"amount": 1000, "to_dino": false}},
+    {"id": "tekengram", "type": "unlockengram", "description": "解锁泰克靴子、手套", "price": 20, "min_level": 0, "max_level": 0, "permissions": ["Donator-Gold", "Donator-Diamond"],
+     "engrams": ["Blueprint'/Game/PrimalEarth/CoreBlueprints/Items/Armor/TEK/PrimalItemArmor_TekBoots.PrimalItemArmor_TekBoots'", "Blueprint'/Game/PrimalEarth/CoreBlueprints/Items/Armor/TEK/PrimalItemArmor_TekGloves.PrimalItemArmor_TekGloves'"]},
+    {"id": "allengrams", "type": "command", "description": "解锁全部图纸", "price": 1000, "min_level": 0, "max_level": 0, "permissions": [], "commands": ["Gives you all engram unlocks"]}
+  ],
+  "kits": [
+    {
+      "name": "starter", "description": "新手礼包（牛龙和鞍）", "price": 90, "default_amount": 2,
+      "min_level": 0, "max_level": 0, "permissions": [], "only_from_spawn": true,
+      "items": [{"blueprint": "Blueprint'/Game/PrimalEarth/CoreBlueprints/Items/Armor/Saddles/PrimalItemArmor_CarnoSaddle.PrimalItemArmor_CarnoSaddle'", "amount": 1, "quality": 0, "blueprint_only": false}],
+      "dinos": [{"blueprint": "Blueprint'/Game/PrimalEarth/Dinos/Carno/Carno_Character_BP.Carno_Character_BP'", "level": 10, "neutered": false, "gender": "", "saddle_blueprint": ""}],
+      "commands": []
+    },
+    {
+      "name": "vip", "description": "赞助礼包（翼龙）", "price": null, "default_amount": 1,
+      "min_level": 0, "max_level": 0, "permissions": ["Admins", "Premiums"], "only_from_spawn": false,
+      "items": [],
+      "dinos": [{"blueprint": "Blueprint'/Game/PrimalEarth/Dinos/Ptero/Ptero_Character_BP.Ptero_Character_BP'", "level": 20, "neutered": true, "gender": "", "saddle_blueprint": ""}],
+      "commands": ["Gives you all engram unlocks"]
+    }
+  ],
+  "sell": [
+    {"id": "stone", "description": "回收石头", "price": 10, "amount": 100, "blueprint": "Blueprint'/Game/PrimalEarth/CoreBlueprints/Resources/PrimalItemResource_Stone.PrimalItemResource_Stone'"}
+  ]
+}

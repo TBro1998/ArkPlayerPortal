@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+/* 深色 HUD 风格，和 ArkServerCommander 的界面一致：深蓝底、半透明面板、青色强调 */
+@theme {
+  --color-bg: #070d18;
+  --color-panel: rgb(16 27 45 / 0.92);
+  --color-panel-2: rgb(24 38 61 / 0.95);
+  --color-line: rgb(94 234 212 / 0.14);
+  --color-text: #dbe7f3;
+  --color-muted: #8ea2b8;
+  --color-primary: #2dd4bf;
+  --color-amber: #fbbf24;
+  --color-ok: #4ade80;
+  --color-bad: #f87171;
+  --font-sans: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-bg text-text font-sans antialiased;
+    background-image:
+      radial-gradient(circle at 15% -10%, rgb(45 212 191 / 0.08), transparent 45%),
+      radial-gradient(circle at 100% 0%, rgb(56 189 248 / 0.06), transparent 40%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
+@utility panel {
+  @apply rounded-lg border border-line bg-panel;
+}
+
+/* 左上、右下的青色角标 */
+@utility hud {
+  position: relative;
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    border-color: var(--color-primary);
+    opacity: 0.7;
+  }
+  &::before {
+    top: -1px;
+    left: -1px;
+    border-top: 2px solid;
+    border-left: 2px solid;
+    border-top-left-radius: 6px;
+  }
+  &::after {
+    right: -1px;
+    bottom: -1px;
+    border-right: 2px solid;
+    border-bottom: 2px solid;
+    border-bottom-right-radius: 6px;
+  }
+}
+
+@utility num {
+  font-variant-numeric: tabular-nums;
+}

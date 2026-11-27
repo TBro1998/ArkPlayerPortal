@@ -1,5 +1,12 @@
-node_modules/
-dist/
+# 前端
+web/node_modules/
+web/dist/*
+!web/dist/.gitkeep
+web/*.tsbuildinfo
+
+# 构建产物
 /bin/
+/portal
 *.exe
+
 .env

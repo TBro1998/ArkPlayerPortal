@@ -1,0 +1,7 @@
+.git
+bin
+dev
+web/node_modules
+web/dist
+web/*.tsbuildinfo
+*.exe
