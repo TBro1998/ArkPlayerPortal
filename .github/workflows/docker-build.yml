@@ -1,0 +1,93 @@
+name: Build and Push Docker Image
+
+# 推送 v* tag 时构建镜像，推两个标签：
+#   tbro98/ark-player-portal:<版本>   版本号去掉开头的 v，例如 v1.4.2 → 1.4.2
+#   tbro98/ark-player-portal:latest   带后缀的预发布版本（v1.4.2-b1）不更新 latest
+# ArkServerCommander 固定使用具体的版本号，latest 只给手动部署和测试用
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.vars.outputs.tag }}
+      version: ${{ steps.vars.outputs.version }}
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - name: Get version
+      id: vars
+      run: |
+        tag="${GITHUB_REF#refs/tags/}"
+        echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+        echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v4
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and push
+      env:
+        IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ark-player-portal
+        TAG: ${{ steps.vars.outputs.tag }}
+        VERSION: ${{ steps.vars.outputs.version }}
+      run: |
+        docker build . --file Dockerfile --build-arg VERSION="$VERSION" -t "$IMAGE:$VERSION"
+        docker push "$IMAGE:$VERSION"
+        case "$TAG" in
+          *-*) ;;
+          *)
+            docker tag "$IMAGE:$VERSION" "$IMAGE:latest"
+            docker push "$IMAGE:latest"
+            ;;
+        esac
+
+  # 镜像推送成功后再发布 Release，保证 Release 里写的 tag 一定有对应的镜像
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+
+    - name: Prepare release notes
+      env:
+        TAG: ${{ needs.build.outputs.tag }}
+        VERSION: ${{ needs.build.outputs.version }}
+        IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ark-player-portal
+      run: |
+        # actions/checkout 只把 tag 指向的提交取下来，附注 tag 对象会丢失，单独取一次
+        git fetch --force --depth=1 origin "refs/tags/${TAG}:refs/tags/${TAG}"
+        : > release-notes.md
+        if [ "$(git cat-file -t "$TAG")" = tag ]; then
+          git tag -l --format='%(contents:body)' "$TAG" > release-notes.md
+        fi
+        if [ -s release-notes.md ]; then
+          echo >> release-notes.md
+        fi
+        {
+          echo '## Image / 镜像'
+          echo
+          echo '```'
+          echo "${IMAGE}:${VERSION}"
+          echo '```'
+        } >> release-notes.md
+        cat release-notes.md
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v3
+      with:
+        name: ${{ needs.build.outputs.tag }}
+        # v1.4.2-b1 这类带后缀的当作预发布，不出现在 /releases/latest 里
+        prerelease: ${{ contains(needs.build.outputs.tag, '-') }}
+        body_path: release-notes.md
