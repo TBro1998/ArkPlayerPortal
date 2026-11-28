@@ -41,6 +41,16 @@ func (s *Server) isTrusted(a netip.Addr) bool {
 	return false
 }
 
+// fromTrustedProxy 请求来自受信任的反向代理
+func (s *Server) fromTrustedProxy(r *http.Request) bool {
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		host = r.RemoteAddr
+	}
+	a, err := netip.ParseAddr(host)
+	return err == nil && s.isTrusted(a.Unmap())
+}
+
 // clientIP 来源 IP：连接的地址；它是受信任的反向代理时，取 X-Forwarded-For 里从右往左第一个不受信任的地址
 func (s *Server) clientIP(r *http.Request) netip.Addr {
 	host, _, err := net.SplitHostPort(r.RemoteAddr)

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Portal, Shop } from "./types";
+import type { Me, Portal, Shop } from "./types";
 
 export class ApiError extends Error {
   status: number;
@@ -149,4 +149,29 @@ function shopLoader(key: string) {
 
 export function useShop(key: string | null): Remote<Shop> {
   return useLive(key ? shopLoader(key) : null, (kind, k) => kind === "shop" && (k === undefined || k === key));
+}
+
+export const fetchMe = () => getJSON<Me>("/api/v1/me");
+
+export async function logout() {
+  await fetch("/api/v1/logout", { method: "POST" });
+}
+
+// useMe 当前登录的玩家和他的数据，每 30 秒刷新一次（点数文件没有推送通知）
+export function useMe(): Remote<Me> & { reload: () => void } {
+  const [state, setState] = useState<Remote<Me>>({ data: null, error: null, loading: true });
+  const seq = useRef(0);
+  const reload = useCallback(() => {
+    const n = ++seq.current;
+    fetchMe().then(
+      (data) => n === seq.current && setState({ data, error: null, loading: false }),
+      (err) => n === seq.current && setState((s) => ({ ...s, error: err instanceof ApiError ? err : null, loading: false })),
+    );
+  }, []);
+  useEffect(() => {
+    reload();
+    const t = setInterval(() => !document.hidden && reload(), 30000);
+    return () => clearInterval(t);
+  }, [reload]);
+  return { ...state, reload };
 }

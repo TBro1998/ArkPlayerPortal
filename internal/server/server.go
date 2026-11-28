@@ -26,7 +26,7 @@ const (
 	pingInterval    = 25 * time.Second
 )
 
-const contentSecurityPolicy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; " +
+const contentSecurityPolicy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://avatars.steamstatic.com https://avatars.akamai.steamstatic.com https://avatars.cloudflare.steamstatic.com; " +
 	"connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
 
 // Server 玩家站的 HTTP 服务
@@ -42,6 +42,9 @@ type Server struct {
 
 	// pingInterval 测试里改短
 	pingInterval time.Duration
+
+	// login 登录，为 nil 时没有登录相关的接口
+	login *Login
 }
 
 // New web 是网页的静态文件，trusted 是受信任的反向代理地址
@@ -56,6 +59,12 @@ func New(store *snapshot.Store, web fs.FS, trusted []netip.Prefix) *Server {
 	}
 }
 
+// WithLogin 开启登录
+func (s *Server) WithLogin(l *Login) *Server {
+	s.login = l
+	return s
+}
+
 // Handler 所有路由，外面套上方法检查、安全响应头和限流
 func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
@@ -66,10 +75,14 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("GET /api/v1/portal", s.handlePortal)
 	mux.HandleFunc("GET /api/v1/shops/{key}", s.handleShop)
 	mux.HandleFunc("GET /api/v1/events", s.handleEvents)
+	s.registerLogin(mux)
 	mux.HandleFunc("GET /api/", func(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusNotFound, "not_found", "接口不存在")
 	})
 	mux.Handle("GET /", s.webHandler())
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		writeError(w, http.StatusNotFound, "not_found", "接口不存在")
+	})
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		h := w.Header()
@@ -77,7 +90,7 @@ func (s *Server) Handler() http.Handler {
 		h.Set("Referrer-Policy", "no-referrer")
 		h.Set("X-Frame-Options", "DENY")
 		h.Set("Content-Security-Policy", contentSecurityPolicy)
-		if r.Method != http.MethodGet && r.Method != http.MethodHead {
+		if r.Method != http.MethodGet && r.Method != http.MethodHead && !(r.Method == http.MethodPost && s.login != nil && postAllowed(r.URL.Path)) {
 			h.Set("Allow", "GET, HEAD")
 			writeError(w, http.StatusMethodNotAllowed, "method_not_allowed", "只支持 GET 请求")
 			return

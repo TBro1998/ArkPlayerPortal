@@ -1,6 +1,6 @@
 # ArkPlayerPortal
 
-[ArkServerCommander](https://github.com/TBro1998/ArkServerCommander) 的玩家站：服主的 Commander 为玩家开一个网页，玩家在上面看公告、服务器状态和信息、商店里的商品（ArkShop），也可以用 [ARKFGF 联机助手](https://github.com/TBro1998/ArkServerLink) 直接查看。内容变化时打开着的页面自动更新。
+[ArkServerCommander](https://github.com/TBro1998/ArkServerCommander) 的玩家站：服主的 Commander 为玩家开一个网页（中文 / 英文），玩家在上面看公告、服务器状态和设置、服主写的规则和指南、商店里的商品（ArkShop），用 Steam 登录后看自己的点数，也可以用 [ARKFGF 联机助手](https://github.com/TBro1998/ArkServerLink) 直接查看。内容变化时打开着的页面自动更新。
 
 商店只用来看：玩家在游戏里用聊天命令（`/buy`、`/kit` 等）购买，玩家站给出可以直接复制的命令。
 
@@ -20,6 +20,8 @@ docker run -d --name ark-player-portal --read-only --cap-drop ALL --security-opt
 | `PORTAL_DATA_DIR` | `/data` | 快照目录，见 [docs/snapshot.md](docs/snapshot.md) |
 | `PORTAL_LISTEN` | `:8080` | 监听地址 |
 | `PORTAL_TRUSTED_PROXIES` | 空 | 反向代理的 IP 或 CIDR（逗号分隔），来自它们的请求按 `X-Forwarded-For` 取来源 IP |
+| `PORTAL_PUBLIC_URL` | 空 | 玩家访问的地址，Steam 登录的回调地址用；为空时按请求的 Host 算 |
+| `PORTAL_ARKFGF_KEYS_URL` | 空 | arkfgf.com 的公钥地址（`https://arkfgf.com/api/v1/auth/portal-keys`），设置了才能用联机助手登录 |
 
 接口见 [docs/api.md](docs/api.md)。
 

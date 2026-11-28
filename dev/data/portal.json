@@ -5,7 +5,16 @@
     "description": "PvE 休闲服，3 倍经验、5 倍驯服。每周三下午维护。\n新人进服先看规则。",
     "qq_group": "123456789",
     "discord": "https://discord.gg/example",
-    "links": [{"title": "服务器规则", "url": "https://example.com/rules"}, {"title": "坏链接", "url": "javascript:alert(1)"}]
+    "links": [
+      {
+        "title": "服务器规则",
+        "url": "https://example.com/rules"
+      },
+      {
+        "title": "坏链接",
+        "url": "javascript:alert(1)"
+      }
+    ]
   },
   "announcements": [
     {
@@ -54,14 +63,30 @@
       "pvp": false,
       "arkapi": true,
       "cluster_group": 1,
-      "mods": ["731604991", "1404697612"],
-      "rates": {"xp": 3, "taming": 5, "harvest": 3, "breeding": 10},
+      "mods": [
+        {
+          "id": "731604991",
+          "title": "Structures Plus (S+)"
+        },
+        {
+          "id": "1404697612",
+          "title": "Awesome Spyglass!"
+        }
+      ],
+      "rates": {
+        "xp": 3,
+        "taming": 5,
+        "harvest": 3,
+        "breeding": 10
+      },
       "version": "358.24",
       "address": "203.0.113.10:7777",
       "query_port": 27015,
       "room_id": 0,
       "next_restart_at": "2026-11-28T04:00:00Z",
-      "shop": true
+      "shop": true,
+      "settings_page": "settings-3",
+      "points": true
     },
     {
       "key": "5",
@@ -76,13 +101,20 @@
       "arkapi": true,
       "cluster_group": 1,
       "mods": [],
-      "rates": {"xp": 3, "taming": 5, "harvest": 3, "breeding": 10},
+      "rates": {
+        "xp": 3,
+        "taming": 5,
+        "harvest": 3,
+        "breeding": 10
+      },
       "version": "",
       "address": "",
       "query_port": 0,
       "room_id": 482913,
       "next_restart_at": null,
-      "shop": false
+      "shop": false,
+      "settings_page": "settings-5",
+      "points": false
     },
     {
       "key": "6",
@@ -96,14 +128,316 @@
       "pvp": true,
       "arkapi": false,
       "cluster_group": 0,
-      "mods": ["928988"],
-      "rates": {"xp": 1.5, "taming": 2, "harvest": 1, "breeding": 1},
+      "mods": [
+        {
+          "id": "928988",
+          "title": ""
+        }
+      ],
+      "rates": {
+        "xp": 1.5,
+        "taming": 2,
+        "harvest": 1,
+        "breeding": 1
+      },
       "version": "",
       "address": "203.0.113.10:7781",
       "query_port": 0,
       "room_id": 0,
       "next_restart_at": null,
-      "shop": false
+      "shop": false,
+      "settings_page": "settings-6",
+      "points": false
+    }
+  ],
+  "pages": [
+    {
+      "id": "1",
+      "kind": "custom",
+      "title": "服务器规则",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "基本规则"
+        },
+        {
+          "type": "list",
+          "items": [
+            "禁止外挂和利用漏洞",
+            "禁止辱骂其他玩家",
+            "建筑不要挡住矿点和洞口"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "违反规则的第一次警告，第二次封禁。\n有问题在 QQ 群里找管理。"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "kind": "custom",
+      "title": "新手指南",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "出生后先输入 /kit starter 领取新手礼包。"
+        },
+        {
+          "type": "heading",
+          "text": "怎么赚点数"
+        },
+        {
+          "type": "list",
+          "items": [
+            "在线每 30 分钟得 20 点",
+            "赞助玩家更多"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "settings-3",
+      "kind": "settings",
+      "title": {
+        "zh": "服务器设置",
+        "en": "Server settings"
+      },
+      "server_key": "3",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": {
+            "zh": "倍率",
+            "en": "Rates"
+          }
+        },
+        {
+          "type": "kv",
+          "items": [
+            {
+              "label": {
+                "zh": "经验",
+                "en": "XP"
+              },
+              "value": 3
+            },
+            {
+              "label": {
+                "zh": "驯服速度",
+                "en": "Taming speed"
+              },
+              "value": 5
+            },
+            {
+              "label": {
+                "zh": "采集量",
+                "en": "Harvest amount"
+              },
+              "value": 3
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "text": {
+            "zh": "游戏规则",
+            "en": "Gameplay"
+          }
+        },
+        {
+          "type": "kv",
+          "items": [
+            {
+              "label": {
+                "zh": "野生恐龙最高等级",
+                "en": "Max wild dino level"
+              },
+              "value": 150
+            },
+            {
+              "label": {
+                "zh": "PvP",
+                "en": "PvP"
+              },
+              "value": false
+            },
+            {
+              "label": {
+                "zh": "部落人数上限",
+                "en": "Max tribe size"
+              },
+              "value": 6
+            }
+          ]
+        },
+        {
+          "type": "future-block",
+          "text": "客户端不认识的块会被跳过"
+        }
+      ]
+    },
+    {
+      "id": "settings-5",
+      "kind": "settings",
+      "title": {
+        "zh": "服务器设置",
+        "en": "Server settings"
+      },
+      "server_key": "5",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": {
+            "zh": "倍率",
+            "en": "Rates"
+          }
+        },
+        {
+          "type": "kv",
+          "items": [
+            {
+              "label": {
+                "zh": "经验",
+                "en": "XP"
+              },
+              "value": 3
+            },
+            {
+              "label": {
+                "zh": "驯服速度",
+                "en": "Taming speed"
+              },
+              "value": 5
+            },
+            {
+              "label": {
+                "zh": "采集量",
+                "en": "Harvest amount"
+              },
+              "value": 3
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "text": {
+            "zh": "游戏规则",
+            "en": "Gameplay"
+          }
+        },
+        {
+          "type": "kv",
+          "items": [
+            {
+              "label": {
+                "zh": "野生恐龙最高等级",
+                "en": "Max wild dino level"
+              },
+              "value": 150
+            },
+            {
+              "label": {
+                "zh": "PvP",
+                "en": "PvP"
+              },
+              "value": false
+            },
+            {
+              "label": {
+                "zh": "部落人数上限",
+                "en": "Max tribe size"
+              },
+              "value": 6
+            }
+          ]
+        },
+        {
+          "type": "future-block",
+          "text": "客户端不认识的块会被跳过"
+        }
+      ]
+    },
+    {
+      "id": "settings-6",
+      "kind": "settings",
+      "title": {
+        "zh": "服务器设置",
+        "en": "Server settings"
+      },
+      "server_key": "6",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": {
+            "zh": "倍率",
+            "en": "Rates"
+          }
+        },
+        {
+          "type": "kv",
+          "items": [
+            {
+              "label": {
+                "zh": "经验",
+                "en": "XP"
+              },
+              "value": 1.5
+            },
+            {
+              "label": {
+                "zh": "驯服速度",
+                "en": "Taming speed"
+              },
+              "value": 2
+            },
+            {
+              "label": {
+                "zh": "采集量",
+                "en": "Harvest amount"
+              },
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "text": {
+            "zh": "游戏规则",
+            "en": "Gameplay"
+          }
+        },
+        {
+          "type": "kv",
+          "items": [
+            {
+              "label": {
+                "zh": "野生恐龙最高等级",
+                "en": "Max wild dino level"
+              },
+              "value": 150
+            },
+            {
+              "label": {
+                "zh": "PvP",
+                "en": "PvP"
+              },
+              "value": true
+            },
+            {
+              "label": {
+                "zh": "部落人数上限",
+                "en": "Max tribe size"
+              },
+              "value": 6
+            }
+          ]
+        },
+        {
+          "type": "future-block",
+          "text": "客户端不认识的块会被跳过"
+        }
+      ]
     }
   ]
 }

@@ -13,6 +13,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/TBro1998/ArkPlayerPortal/internal/auth"
 	"github.com/TBro1998/ArkPlayerPortal/internal/server"
 	"github.com/TBro1998/ArkPlayerPortal/internal/snapshot"
 	"github.com/TBro1998/ArkPlayerPortal/web"
@@ -60,9 +61,17 @@ func run() error {
 	store := snapshot.NewStore(dataDir)
 	go store.Watch(ctx, time.Second)
 
+	httpClient := &http.Client{Timeout: 15 * time.Second}
+	login := &server.Login{
+		Identity:  auth.NewIdentity(dataDir),
+		Players:   auth.NewPlayers(dataDir),
+		Arkfgf:    &auth.ArkfgfKeys{URL: os.Getenv("PORTAL_ARKFGF_KEYS_URL"), HTTP: httpClient},
+		Steam:     &auth.Steam{HTTP: httpClient},
+		PublicURL: os.Getenv("PORTAL_PUBLIC_URL"),
+	}
 	srv := &http.Server{
 		Addr:              listen,
-		Handler:           server.New(store, web.FS(), trusted).Handler(),
+		Handler:           server.New(store, web.FS(), trusted).WithLogin(login).Handler(),
 		ReadHeaderTimeout: 10 * time.Second,
 		ReadTimeout:       15 * time.Second,
 		WriteTimeout:      30 * time.Second, // SSE 连接自己去掉写超时

@@ -7,6 +7,37 @@ export interface Portal {
   site: Site;
   announcements: Announcement[];
   servers: Server[];
+  pages: Page[];
+}
+
+// 通用页面：文本是字符串或 {"zh","en"}，块只有这几种（客户端不认识的块跳过）
+export type Text = string | { zh?: string; en?: string };
+export type Block =
+  | { type: "heading"; text: Text }
+  | { type: "paragraph"; text: Text }
+  | { type: "list"; items: Text[] }
+  | { type: "kv"; items: { label: Text; value: string | number | boolean }[] }
+  | { type: string; text?: Text; items?: unknown[] };
+
+export interface Page {
+  id: string;
+  kind: "custom" | "settings" | string;
+  title: Text;
+  server_key?: string;
+  blocks: Block[];
+}
+
+export interface PlayerData {
+  points: number;
+  total_spent: number;
+  kits?: Record<string, number>;
+}
+
+export interface Me {
+  user: { steam_id: string; name: string; avatar: string } | null;
+  steam_login: boolean;
+  link_login: boolean;
+  data?: Record<string, PlayerData>;
 }
 
 export interface Site {
@@ -38,7 +69,7 @@ export interface Server {
   pvp: boolean;
   arkapi: boolean;
   cluster_group: number;
-  mods: string[];
+  mods: { id: string; title: string }[];
   rates: { xp: number; taming: number; harvest: number; breeding: number };
   version: string;
   address: string;
@@ -46,6 +77,8 @@ export interface Server {
   room_id: number;
   next_restart_at: string | null;
   shop: boolean;
+  settings_page: string;
+  points: boolean;
 }
 
 export interface Shop {
